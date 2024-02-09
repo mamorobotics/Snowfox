@@ -1,7 +1,0 @@
-{
-  "name": "snowfox",
-  "version-string": "1.0.0",
-  "dependencies": [
-    "asio"
-  ]
-}

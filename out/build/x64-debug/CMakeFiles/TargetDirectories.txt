@@ -1,5 +1,0 @@
-C:/Users/miles/source/repos/Snowfox/out/build/x64-debug/CMakeFiles/edit_cache.dir
-C:/Users/miles/source/repos/Snowfox/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/miles/source/repos/Snowfox/out/build/x64-debug/Snowfox/CMakeFiles/Snowfox.dir
-C:/Users/miles/source/repos/Snowfox/out/build/x64-debug/Snowfox/CMakeFiles/edit_cache.dir
-C:/Users/miles/source/repos/Snowfox/out/build/x64-debug/Snowfox/CMakeFiles/rebuild_cache.dir

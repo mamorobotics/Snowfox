@@ -1,12 +1,35 @@
-﻿// Snowfox.cpp : Defines the entry point for the application.
-//
+﻿#pragma once
 
-#include "Snowfox.h"
+#include <iostream>
+#include <chrono>
 
-using namespace std;
+#include "Connection.hpp"
+
+using namespace std::chrono;
+
+Connection* Connection::connection = new Connection();
 
 int main()
 {
-	cout << "Hello CMake." << endl;
+	Connection* conn = Connection::Get();
+
+	std::string message = "Bonjour!";
+	conn->Send(11, &message);
+
+	bool firstFrame = true;
+
+	std::thread networkThread(&Connection::HandleHandshake, conn);
+	networkThread.detach();
+
+	while (true) {
+		auto start = high_resolution_clock::now();
+			
+		if (firstFrame) {
+			firstFrame = false;
+		}
+		auto stop = high_resolution_clock::now();
+		int duration = duration_cast<microseconds>(stop - start).count();
+	}
+	
 	return 0;
 }
