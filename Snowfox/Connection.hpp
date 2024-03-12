@@ -3,14 +3,21 @@
 #include <tuple>
 #include <sstream>
 #include <thread>
+#include <opencv2/opencv.hpp>
 
 #include <asio.hpp>
-#include "jpgd.h"
+#include "UI.hpp"
 #include "ConnDetails.hpp"
 #include "Management.hpp"
+#include <unistd.h>
+#include <atomic>
+#include <thread>
+
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
 #define PORT 8080
-#define IP "192.168.1.1"
+#define IP "192.168.1.1"     
 
 using asio::ip::udp;
 using asio::ip::address;
@@ -25,10 +32,17 @@ private:
     udp::endpoint remote_endpoint;
 	udp::endpoint sender_endpoint;
 
-	std::vector<char> recv_buffer;
+	std::vector<char> size_buffer;
+	std::vector<char> header_buffer;
+	std::vector<char> initial_buffer;
+	std::vector<char> data_buffer;
+	std::vector<char> image_buffer;
 	int numMessages;
 	std::string recvLength;
 	std::string recvHeader;
+
+	std::atomic<bool> isDecoding = false;
+	std::atomic<bool> newImage = false;
 
 	static Connection* connection;
 
@@ -47,8 +61,12 @@ public:
 
 	void Recieve();
 	void HandleHandshake();
+	std::vector<char>* GetImageBuffer(){ return &image_buffer; };
+	bool GetDecoding(){ return isDecoding; }
+	bool GetNewImage(){ return newImage; }
+	void SetDecoding(bool val){ isDecoding = val; }
+	void SetNewImage(bool val){ newImage = val; }
 	Connection(const Connection& obj) = delete;
 	~Connection();
 	static Connection* Get();
 };
-
