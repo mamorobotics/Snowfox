@@ -1,8 +1,7 @@
 #include "Connection.hpp"
 
-void Connection::Send(int header, void* message)
+void Connection::Send(int header, std::string message)
 {
-    //std::string messageData = *message;
     std::string initialMsg = std::to_string(sizeof(message)) + "!" + std::to_string(header);
     initialMsg.insert(0, 32-initialMsg.size(), ' ');
     auto initSent = socket.send_to(asio::buffer(initialMsg, 32), remote_endpoint, 0);

@@ -49,7 +49,7 @@ public:
     }
 	void ResizeBuffer(int newSize);
 
-	void Send(int header, void * message);
+	void Send(int header, std::string message);
 
 	void Recieve();
 	void HandleHandshake();
