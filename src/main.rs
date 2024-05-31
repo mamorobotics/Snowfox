@@ -10,8 +10,7 @@ fn main() -> std::io::Result<()> {
     {
         let socket = UdpSocket::bind(ADDR)?;
 
-        let mut i=0;
-        while i <1 00
+        while true
         {
             let mut init_buf = [0; 32];
             let (_amt, _src) = socket.recv_from(&mut init_buf)?;
@@ -34,8 +33,6 @@ fn main() -> std::io::Result<()> {
             }
 
             let _ = send_camera(&socket);
-
-            i+=1;
         }
     }
     Ok(())
