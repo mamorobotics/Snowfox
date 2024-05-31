@@ -4,3 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+opencv = {version="0.92.0", features=["clang-runtime"]}

@@ -1,6 +1,8 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
 use std::str;
 
+mod camera;
+
 const ADDR : &str = "192.168.1.1:8080";
 const PORT : &str = "8080";
 

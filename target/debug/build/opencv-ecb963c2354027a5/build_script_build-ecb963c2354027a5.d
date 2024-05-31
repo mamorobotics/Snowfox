@@ -1,0 +1,10 @@
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/opencv-ecb963c2354027a5/build_script_build-ecb963c2354027a5: /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/binding-generator.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/cmake_probe.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/docs.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/generator.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/library.rs
+
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/opencv-ecb963c2354027a5/build_script_build-ecb963c2354027a5.d: /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/binding-generator.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/cmake_probe.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/docs.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/generator.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/library.rs
+
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/binding-generator.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/cmake_probe.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/docs.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/generator.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/opencv-0.92.0/build/library.rs:

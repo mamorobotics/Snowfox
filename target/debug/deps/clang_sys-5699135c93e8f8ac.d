@@ -1,0 +1,14 @@
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/deps/libclang_sys-5699135c93e8f8ac.rmeta: /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/macros.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/common.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/dynamic.rs
+
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/deps/libclang_sys-5699135c93e8f8ac.rlib: /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/macros.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/common.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/dynamic.rs
+
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/deps/clang_sys-5699135c93e8f8ac.d: /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/macros.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/common.rs /Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/dynamic.rs
+
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs:
+/Users/maxlazarus/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs:
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/macros.rs:
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/common.rs:
+/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out/dynamic.rs:
+
+# env-dep:OUT_DIR=/Users/maxlazarus/Documents/GitHub/Snowfox/target/debug/build/clang-sys-aa0c25d6d974bd59/out
