@@ -15,11 +15,13 @@ fn main() -> std::io::Result<()> {
         let mut cam1 = videoio::VideoCapture::new(0, videoio::CAP_ANY).unwrap();
         let _ = cam1.set(CAP_PROP_FRAME_WIDTH, 1280.0);
         let _ = cam1.set(CAP_PROP_FRAME_HEIGHT, 720.0);
+        let _ = cam1.set(CAP_PROP_FPS, 20.0);
         let _ = cam1.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
 
         let mut cam2 = videoio::VideoCapture::new(1, videoio::CAP_ANY).unwrap();
         let _ = cam2.set(CAP_PROP_FRAME_WIDTH, 1280.0);
         let _ = cam2.set(CAP_PROP_FRAME_HEIGHT, 720.0);
+        let _ = cam2.set(CAP_PROP_FPS, 20.0);
         let _ = cam2.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
 
         let socket = UdpSocket::bind(ADDR)?;
