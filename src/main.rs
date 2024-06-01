@@ -7,21 +7,25 @@ mod camera;
 const ADDR : &str = "192.168.1.1:8080";
 const PORT : &str = "8080";
 
+const WIDTH : f64 = 1280.0;
+const HEIGHT : f64 = 720.0;
+const FPS : f64 = 20.0;
+
 fn main() -> std::io::Result<()> {
     {
         let mut cam_num = 0;
         let mut cam_qual = 100;
 
         let mut cam1 = videoio::VideoCapture::new(0, videoio::CAP_ANY).unwrap();
-        let _ = cam1.set(CAP_PROP_FRAME_WIDTH, 1280.0);
-        let _ = cam1.set(CAP_PROP_FRAME_HEIGHT, 720.0);
-        let _ = cam1.set(CAP_PROP_FPS, 20.0);
+        let _ = cam1.set(CAP_PROP_FRAME_WIDTH, WIDTH);
+        let _ = cam1.set(CAP_PROP_FRAME_HEIGHT, HEIGHT);
+        let _ = cam1.set(CAP_PROP_FPS, FPS);
         let _ = cam1.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
 
         let mut cam2 = videoio::VideoCapture::new(1, videoio::CAP_ANY).unwrap();
-        let _ = cam2.set(CAP_PROP_FRAME_WIDTH, 1280.0);
-        let _ = cam2.set(CAP_PROP_FRAME_HEIGHT, 720.0);
-        let _ = cam2.set(CAP_PROP_FPS, 20.0);
+        let _ = cam2.set(CAP_PROP_FRAME_WIDTH, WIDTH);
+        let _ = cam2.set(CAP_PROP_FRAME_HEIGHT, HEIGHT);
+        let _ = cam2.set(CAP_PROP_FPS, FPS);
         let _ = cam2.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
 
         let socket = UdpSocket::bind(ADDR)?;
