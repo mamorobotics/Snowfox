@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
 use std::str;
-use opencv::videoio::{self, VideoCapture};
+use opencv::videoio::{self, VideoCapture, *};
 
 mod camera;
 
@@ -11,10 +11,21 @@ fn main() -> std::io::Result<()> {
     {
         let mut cam_num = 0;
         let mut cam_qual = 100;
+
         let mut cam1 = videoio::VideoCapture::new(0, videoio::CAP_ANY).unwrap();
+        let _ = cam1.set(CAP_PROP_FRAME_WIDTH, 1280.0);
+        let _ = cam1.set(CAP_PROP_FRAME_HEIGHT, 720.0);
+        let _ = cam1.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
+
         let mut cam2 = videoio::VideoCapture::new(1, videoio::CAP_ANY).unwrap();
+        let _ = cam2.set(CAP_PROP_FRAME_WIDTH, 1280.0);
+        let _ = cam2.set(CAP_PROP_FRAME_HEIGHT, 720.0);
+        let _ = cam2.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
 
         let socket = UdpSocket::bind(ADDR)?;
+        socket.set_nonblocking(true).unwrap();
+
+        socket.send_to(&[0,1,1,0], SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), PORT.parse::<u16>().unwrap()))?;
 
         loop
         {
@@ -23,8 +34,8 @@ fn main() -> std::io::Result<()> {
 
             let msg = str::from_utf8(&init_buf).unwrap();
 
-            let size = &msg[..msg.find("!").unwrap()].parse::<i32>().unwrap();
-            let header = &msg[msg.rfind("!").unwrap()..].parse::<i32>().unwrap();
+            let size = &msg.parse::<i32>().unwrap();
+            let headers = &msg[msg.rfind("!").unwrap()..];
 
             let mut data_buf = Vec::new();
 
@@ -38,8 +49,22 @@ fn main() -> std::io::Result<()> {
                 data_buf.append(&mut temp_buf);
             }
 
-            if *header == 6{
-                
+            for head in (*headers).split("?"){
+                if head == "6"{
+                    let data = str::from_utf8(&data_buf).unwrap();
+                    for msg_temp_all in data.split("?"){
+                        let msg_temp : Vec<_> = msg_temp_all.split("!").collect();
+                        let msg_temp_type = msg_temp.clone().into_iter().nth(0);
+                        let msg_temp_val = msg_temp.clone().into_iter().nth(1).expect("value").parse::<i32>().unwrap();
+                        if msg_temp_type == Some("cam") 
+                        {
+                            cam_num = msg_temp_val;
+                        }else if msg_temp_type == Some("qual") 
+                        {
+                            cam_qual = msg_temp_val;
+                        }
+                    }
+                }
             }
 
             let _ = send_camera(&socket, &mut cam1, &mut cam2, cam_num, cam_qual);
