@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
 
             let msg = str::from_utf8(&init_buf).unwrap();
 
-            let size = &msg.parse::<i32>().unwrap();
+            let size = &msg[..msg.rfind("!").unwrap()].parse::<i32>().unwrap(); 
             let headers = &msg[msg.rfind("!").unwrap()..];
 
             let mut data_buf = Vec::new();
