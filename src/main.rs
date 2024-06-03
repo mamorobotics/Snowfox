@@ -16,17 +16,8 @@ fn main() -> std::io::Result<()> {
         let mut cam_num = 0;
         let mut cam_qual = 100;
 
-        let mut cam1 = videoio::VideoCapture::new(0, videoio::CAP_ANY).unwrap();
-        let _ = cam1.set(CAP_PROP_FRAME_WIDTH, WIDTH);
-        let _ = cam1.set(CAP_PROP_FRAME_HEIGHT, HEIGHT);
-        let _ = cam1.set(CAP_PROP_FPS, FPS);
-        let _ = cam1.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
-
-        let mut cam2 = videoio::VideoCapture::new(1, videoio::CAP_ANY).unwrap();
-        let _ = cam2.set(CAP_PROP_FRAME_WIDTH, WIDTH);
-        let _ = cam2.set(CAP_PROP_FRAME_HEIGHT, HEIGHT);
-        let _ = cam2.set(CAP_PROP_FPS, FPS);
-        let _ = cam2.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
+        let mut cam1 = camera::Camera(0, WIDTH, HEIGHT, FPS);
+        let mut cam1 = camera::Camera(1, WIDTH, HEIGHT, FPS);
 
         let socket = UdpSocket::bind(ADDR)?;
         socket.set_nonblocking(true).unwrap();
@@ -78,15 +69,15 @@ fn main() -> std::io::Result<()> {
     }
 }
 
-fn send_camera(socket : &UdpSocket, cam1 : &mut VideoCapture, cam2 : &mut VideoCapture, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
+fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
     {
         let cam_buf;
 
         if cam_num==0{
-            cam_buf = camera::get_camera_buf(cam1, cam_qual);
+            cam_buf = cam1.getCameraBuf(cam_qual);
         }
         else{
-            cam_buf = camera::get_camera_buf(cam2, cam_qual);
+            cam_buf = cam2.getCameraBuf(cam_qual);
         }
         socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), PORT.parse::<u16>().unwrap()))?;
     }
