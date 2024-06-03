@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()> {
         let socket = UdpSocket::bind(ADDR)?;
         //socket.set_nonblocking(true).unwrap();
 
-        socket.send_to(&"0110".as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), 8080))?;
+        send_message(socket, "0110");
 
         loop
         {
@@ -66,6 +66,11 @@ fn main() -> std::io::Result<()> {
             //let _ = send_camera(&socket, &mut cam1, &mut cam2, cam_num, cam_qual);
         }
     }
+}
+
+fn send_message(socket : UdpSocket, message : str)
+{
+    socket.send_to(message.as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), 8080))?;
 }
 
 fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
