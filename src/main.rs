@@ -1,6 +1,5 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
 use std::str;
-use opencv::videoio::{self, VideoCapture, *};
 
 mod camera;
 
@@ -16,8 +15,8 @@ fn main() -> std::io::Result<()> {
         let mut cam_num = 0;
         let mut cam_qual = 100;
 
-        let mut cam1 = camera::Camera(0, WIDTH, HEIGHT, FPS);
-        let mut cam2 = camera::Camera(1, WIDTH, HEIGHT, FPS);
+        let mut cam1 = camera::Camera::new(0, WIDTH, HEIGHT, FPS);
+        let mut cam2 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
 
         let socket = UdpSocket::bind(ADDR)?;
         socket.set_nonblocking(true).unwrap();
@@ -74,10 +73,10 @@ fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut came
         let cam_buf;
 
         if cam_num==0{
-            cam_buf = cam1.getCameraBuf(cam_qual);
+            cam_buf = cam1.get_camera_buf(cam_qual);
         }
         else{
-            cam_buf = cam2.getCameraBuf(cam_qual);
+            cam_buf = cam2.get_camera_buf(cam_qual);
         }
         socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), PORT.parse::<u16>().unwrap()))?;
     }
