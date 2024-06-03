@@ -17,7 +17,7 @@ fn main() -> std::io::Result<()> {
         let mut cam_qual = 100;
 
         let mut cam1 = camera::Camera(0, WIDTH, HEIGHT, FPS);
-        let mut cam1 = camera::Camera(1, WIDTH, HEIGHT, FPS);
+        let mut cam2 = camera::Camera(1, WIDTH, HEIGHT, FPS);
 
         let socket = UdpSocket::bind(ADDR)?;
         socket.set_nonblocking(true).unwrap();
