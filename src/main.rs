@@ -68,7 +68,7 @@ fn main() -> std::io::Result<()> {
     }
 }
 
-fn send_message(socket : UdpSocket, message : str)
+fn send_message(socket : UdpSocket, message : &str)
 {
     socket.send_to(message.as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), 8080))?;
 }
