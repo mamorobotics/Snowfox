@@ -48,7 +48,7 @@ fn main() -> std::io::Result<()> {
                     {
                         let mut temp_buf = Vec::new();
                         temp_buf.resize(if (size - total_size) > 65500{65500} else {(size-total_size) as usize}, 0);
-                        let (_amt, _src) = socket.recv_from(&mut temp_buf)?;
+                        let (_amt, _src) = socket.recv_from(&mut temp_buf).unwrap();
                         total_size += if (size - total_size) > 65500{65500} else {size-total_size};
                         data_buf.append(&mut temp_buf);
                     }
