@@ -1,5 +1,5 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
-use std::str;
+use std::{str, thread, sync::*};
 
 mod camera;
 
@@ -15,13 +15,18 @@ fn main() -> std::io::Result<()> {
         let mut cam_num = 0;
         let mut cam_qual = 100;
 
-        //let mut cam1 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
-        //let mut cam2 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
+        let mut cam1 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
+        let mut cam2 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
 
-        let socket = UdpSocket::bind(ADDR)?;
-        //socket.set_nonblocking(true).unwrap();
+        let socket = Arc::new(UdpSocket::bind(ADDR)?);
 
         send_message(&socket, "0110");
+
+        let sock = Arc::clone(&socket);
+
+        thread::spawn(move || {
+            send_camera(&sock, &mut cam1, &mut cam2, cam_num, cam_qual).unwrap();
+        });
 
         loop
         {
@@ -62,8 +67,6 @@ fn main() -> std::io::Result<()> {
                     }
                 }
             }
-
-            //let _ = send_camera(&socket, &mut cam1, &mut cam2, cam_num, cam_qual);
         }
     }
 }
