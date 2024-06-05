@@ -4,7 +4,7 @@ use std::str;
 mod camera;
 
 const ADDR : &str = "192.168.1.2:8080";
-const PORT : &str = "8080";
+const PORT : &u16 = &8080;
 
 const WIDTH : f64 = 1280.0;
 const HEIGHT : f64 = 720.0;
@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()> {
         let socket = UdpSocket::bind(ADDR)?;
         //socket.set_nonblocking(true).unwrap();
 
-        send_message(socket, "0110");
+        send_message(&socket, "0110");
 
         loop
         {
@@ -68,9 +68,9 @@ fn main() -> std::io::Result<()> {
     }
 }
 
-fn send_message(socket : UdpSocket, message : &str)
+fn send_message(socket : &UdpSocket, message : &str)
 {
-    socket.send_to(message.as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), 8080))?;
+    socket.send_to(message.as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT)).unwrap();
 }
 
 fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
@@ -83,7 +83,7 @@ fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut came
         //else{
             //cam_buf = cam2.get_camera_buf(cam_qual);
         //}
-        socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), PORT.parse::<u16>().unwrap()))?;
+        socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
     }
     Ok(())
 }
