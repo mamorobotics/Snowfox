@@ -28,7 +28,7 @@ fn main() -> std::io::Result<()> {
 
         thread::scope(|s| {
             s.spawn(|| {
-                send_camera(&sock, &mut cam1, &mut cam2, unsafe{cam_num.as_ptr().read()}, unsafe{cam_qual.as_ptr().read()}).unwrap();
+                send_camera(&sock, &mut cam1, &mut cam2, cam_num.load(Ordering::Relaxed), cam_qual.load(Ordering::Relaxed)).unwrap();
             });
             s.spawn(||{
                 loop
@@ -62,10 +62,10 @@ fn main() -> std::io::Result<()> {
                                 let msg_temp_val = msg_temp.clone().into_iter().nth(1).expect("value").parse::<i32>().unwrap();
                                 if msg_temp_type == Some("cam") 
                                 {
-                                    unsafe {cam_num.as_ptr().write(msg_temp_val);}
+                                    cam_num.store(msg_temp_val, Ordering::Relaxed);
                                 }else if msg_temp_type == Some("qual") 
                                 {
-                                    unsafe {cam_qual.as_ptr().write(msg_temp_val);}
+                                    cam_qual.store(msg_temp_val, Ordering::Relaxed);
                                 }
                             }
                         }
