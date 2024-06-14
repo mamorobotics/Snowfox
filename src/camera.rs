@@ -11,7 +11,6 @@ impl Camera {
         let _ = camera.set(CAP_PROP_FRAME_WIDTH, width);
         let _ = camera.set(CAP_PROP_FRAME_HEIGHT, height);
         let _ = camera.set(CAP_PROP_FPS, fps);
-        let _ = camera.set(CAP_PROP_FOURCC, f64::from(VideoWriter::fourcc('M', 'J', 'P', 'G').unwrap()));
         return Self {camera};
     }
 

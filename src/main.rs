@@ -1,5 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
 use std::{str, thread, sync::*};
+use pad::PadStr;
 
 use atomic::{AtomicI32, Ordering};
 
@@ -22,7 +23,7 @@ fn main() -> std::io::Result<()> {
 
         let socket = Arc::new(UdpSocket::bind(ADDR)?);
 
-        send_message(&socket, "0110");
+        send_handshake(&socket);
 
         let sock = Arc::clone(&socket);
 
@@ -78,9 +79,9 @@ fn main() -> std::io::Result<()> {
     }Ok(())
 }
 
-fn send_message(socket : &UdpSocket, message : &str)
+fn send_handshake(socket : &UdpSocket)
 {
-    socket.send_to(message.as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT)).unwrap();
+    socket.send_to("0110".as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT)).unwrap();
 }
 
 fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
@@ -98,16 +99,22 @@ fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut came
 
         println!("Send");
 
+        let pre_msg = (cam_buf.len().to_string() + "!" + "4").pad_to_width(32);
+        let pre_msg_bytes = pre_msg.as_bytes();
+        socket.send_to(&pre_msg_bytes, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
+
+        println!("{}", pre_msg);
+
         if cam_buf.len() > packet_size {
             while cam_buf.len() > packet_size {
                 let temp: Vec<u8> = cam_buf[..packet_size].to_vec();
                 cam_buf = cam_buf[(packet_size+1)..].to_vec();
 
-                socket.send_to(&temp, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 2)), *PORT))?;
+                socket.send_to(&temp, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
             }
         }
         else if cam_buf.len() != 0 {
-            socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 2)), *PORT))?;
+            socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
         }
     }
     Ok(())
