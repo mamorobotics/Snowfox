@@ -15,29 +15,30 @@ const FPS : f64 = 20.0;
 
 fn main() -> std::io::Result<()> {
     {
-        let cam_num = AtomicI32::new(0);
+        let cam_num = AtomicI32::new(1);
         let cam_qual = AtomicI32::new(100);
 
-        let mut cam1 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
-        let mut cam2 = camera::Camera::new(1, WIDTH, HEIGHT, FPS);
+        let mut cam1 = camera::Camera::new(0, WIDTH, HEIGHT, FPS);
+        let mut cam2 = camera::Camera::new(0, WIDTH, HEIGHT, FPS);
 
-        let socket = Arc::new(UdpSocket::bind(ADDR)?);
+        //let socket = Arc::new(UdpSocket::bind(ADDR)?);
 
-        send_handshake(&socket);
+        //send_handshake(&socket);
 
-        let sock = Arc::clone(&socket);
+        //let sock = Arc::clone(&socket);
 
         thread::scope(|s| {
             s.spawn(|| {
                 loop{
-                    send_camera(&sock, &mut cam1, &mut cam2, cam_num.load(Ordering::Relaxed), cam_qual.load(Ordering::Relaxed)).unwrap();
+                    //send_camera(&sock, &mut cam1, &mut cam2, cam_num.load(Ordering::Relaxed), cam_qual.load(Ordering::Relaxed)).unwrap();
+                    send_camera(&mut cam1, &mut cam2, 0, cam_qual.load(Ordering::Relaxed)).unwrap();
                 }
             });
             s.spawn(||{
                 loop
                 {
                     let mut init_buf = [0; 32];
-                    let (_amt, _src) = socket.recv_from(&mut init_buf).unwrap();
+                    //let (_amt, _src) = socket.recv_from(&mut init_buf).unwrap();
 
                     let msg = str::from_utf8(&init_buf).unwrap();
 
@@ -51,7 +52,7 @@ fn main() -> std::io::Result<()> {
                     {
                         let mut temp_buf = Vec::new();
                         temp_buf.resize(if (size - total_size) > 65500{65500} else {(size-total_size) as usize}, 0);
-                        let (_amt, _src) = socket.recv_from(&mut temp_buf).unwrap();
+                        //let (_amt, _src) = socket.recv_from(&mut temp_buf).unwrap();
                         total_size += if (size - total_size) > 65500{65500} else {size-total_size};
                         data_buf.append(&mut temp_buf);
                     }
@@ -84,24 +85,26 @@ fn send_handshake(socket : &UdpSocket)
     socket.send_to("0110".as_bytes(), SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT)).unwrap();
 }
 
-fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
+//fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
+fn send_camera(cam1 : &mut camera::Camera, cam2 : &mut camera::Camera, cam_num : i32, cam_qual : i32) -> std::io::Result<()> {
     {
         let mut cam_buf: Vec<u8>;
+        let mut bytes: String;
 
         if cam_num==0{
-            cam_buf = cam1.get_camera_buf(cam_qual);
+            (cam_buf, bytes) = cam1.get_camera_buf(cam_qual);
         }
         else{
-            cam_buf = cam2.get_camera_buf(cam_qual);
+            (cam_buf, bytes) = cam2.get_camera_buf(cam_qual);
         }
 
         let packet_size = 65500;
 
         println!("Send");
 
-        let pre_msg = (cam_buf.len().to_string() + "!" + "4").pad_to_width(32);
+        let pre_msg = (bytes + "!" + "4").pad_to_width(32);
         let pre_msg_bytes = pre_msg.as_bytes();
-        socket.send_to(&pre_msg_bytes, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
+        //socket.send_to(&pre_msg_bytes, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
 
         println!("{}", pre_msg);
 
@@ -110,11 +113,11 @@ fn send_camera(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut came
                 let temp: Vec<u8> = cam_buf[..packet_size].to_vec();
                 cam_buf = cam_buf[(packet_size+1)..].to_vec();
 
-                socket.send_to(&temp, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
+                //socket.send_to(&temp, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
             }
         }
         else if cam_buf.len() != 0 {
-            socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
+            //socket.send_to(&cam_buf, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
         }
     }
     Ok(())
