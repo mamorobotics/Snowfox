@@ -2,19 +2,25 @@ use opencv::{prelude::*, videoio::*, core::*, imgcodecs::*};
 use opencv::videoio::{self, VideoCapture};
 
 pub struct Camera {
-    camera : VideoCapture
+    camera : VideoCapture,
+    id : i32,
+    width : f64,
+    height : f64
 }
 
 impl Camera {
-    pub fn new(id : i32, width : f64, height : f64, fps : f64) -> Self{
+    pub fn get_index(&mut self) -> i32{
+	    return self.id;
+    }
+    pub fn new(id : i32, width : f64, height : f64) -> Self{
         let mut camera : VideoCapture = VideoCapture::new(id, videoio::CAP_ANY).unwrap();
-        let _ = camera.set(CAP_PROP_FRAME_WIDTH, width);
         let _ = camera.set(CAP_PROP_FRAME_HEIGHT, height);
-        //let _ = camera.set(CAP_PROP_FPS, fps);
-        return Self {camera};
+        let _ = camera.set(CAP_PROP_FRAME_WIDTH, width);
+
+        return Self{camera, id, width, height};
     }
 
-    pub fn get_camera_buf(&mut self, cam_qual : i32) -> (Vec<u8>, String){
+    pub fn get_single_camera_buf(&mut self, cam_qual : i32) -> (Vec<u8>, String){
         let mut frame = Mat::default();
         
         let mut res = self.camera.read(&mut frame).unwrap();
@@ -28,15 +34,19 @@ impl Camera {
         params.push(cam_qual);
         imencode(".jpg", &frame, &mut buf, &params).unwrap();
 
-        //let mut buf = Mat::data_bytes(&frame).unwrap().to_vec();
-
-        //let mut step = frame.step1(0).unwrap() as usize;
-        //let mut rows = frame.rows() as usize;
-        //let mut bytes = step  * rows;
-        let mut bytes = buf.to_vec().len();
-
-        println!("Bytes: {}", bytes);
+        let bytes = buf.to_vec().len();
 
         (buf.to_vec(), bytes.to_string())
+    }
+    pub fn new_index(&mut self, id : i32) -> Self{
+	    let mut camera : VideoCapture = VideoCapture::new(id, videoio::CAP_ANY).unwrap();
+
+        let _ = camera.set(CAP_PROP_FRAME_WIDTH, self.width);
+        let _ = camera.set(CAP_PROP_FRAME_HEIGHT, self.height);
+
+        let width = self.width;
+        let height = self.height;
+        
+        return Self{camera, id, width, height};
     }
 }
