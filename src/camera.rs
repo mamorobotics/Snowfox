@@ -39,7 +39,7 @@ impl Camera {
         (buf.to_vec(), bytes.to_string())
     }
     pub fn new_index(&mut self, id : i32) -> Self{
-	    let mut camera : VideoCapture = VideoCapture::new(id, videoio::CAP_ANY).unwrap();
+	let mut camera : VideoCapture = VideoCapture::new(id, videoio::CAP_ANY).unwrap();
 
         let _ = camera.set(CAP_PROP_FRAME_WIDTH, self.width);
         let _ = camera.set(CAP_PROP_FRAME_HEIGHT, self.height);
