@@ -18,7 +18,8 @@ fn main() -> std::io::Result<()> {
         let cam_num = AtomicI32::new(1);
         let cam_qual = AtomicI32::new(80);
 
-        let mut cam = camera::Camera::new(2, WIDTH, HEIGHT);
+        let mut cam1 = camera::Camera::new(2, WIDTH, HEIGHT);
+        let mut cam2 = camera::Camera::new(0, WIDTH, HEIGHT);
 
         let socket = Arc::new(UdpSocket::bind(ADDR)?);
 
@@ -30,17 +31,15 @@ fn main() -> std::io::Result<()> {
         thread::scope(|s| {
             s.spawn(|| {
                 loop{
-                    println!("{}", camera::Camera::get_index(&mut cam));
-                    println!("{}", cam_num.load(Ordering::Relaxed));
-                    println!("");
+                    // println!("{}", camera::Camera::get_index(&mut cam));
+                    // println!("{}", cam_num.load(Ordering::Relaxed));
+                    // println!("");
 
-                    if cam_num.load(Ordering::Relaxed) ==  1 && camera::Camera::get_index(&mut cam) != 2{
-                    cam = camera::Camera::new_index(&mut cam, 2);
-                    }else if cam_num.load(Ordering::Relaxed) == 0 && camera::Camera::get_index(&mut cam) != 0{
-                        cam = camera::Camera::new_index(&mut cam, 0);
+                    if cam_num.load(Ordering::Relaxed) ==  1{
+                        send_camera(&sock, &mut cam1, cam_qual.load(Ordering::Relaxed)).unwrap();
+                    }else if cam_num.load(Ordering::Relaxed) == 0{
+                        send_camera(&sock, &mut cam2, cam_qual.load(Ordering::Relaxed)).unwrap();
                     }               
-
-                    send_camera(&sock, &mut cam, cam_qual.load(Ordering::Relaxed)).unwrap();
                 }
             });
             //Cam num and quality reciver
