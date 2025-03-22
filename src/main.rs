@@ -39,7 +39,7 @@ fn main() -> std::io::Result<()> {
                         send_camera(&sock, &mut cam1, cam_qual.load(Ordering::Relaxed)).unwrap();
                     }else if cam_num.load(Ordering::Relaxed) == 0{
                         send_camera(&sock, &mut cam2, cam_qual.load(Ordering::Relaxed)).unwrap();
-                    }               
+                    }
                 }
             });
             //Cam num and quality reciver
@@ -52,7 +52,7 @@ fn main() -> std::io::Result<()> {
                     let msg = str::from_utf8(&init_buf).unwrap();
                     println!("{}", msg);
 
-                    let size = &msg[..msg.rfind("!").unwrap()].parse::<i32>().unwrap(); 
+                    let size = &msg[..msg.rfind("!").unwrap()].parse::<i32>().unwrap();
                     let headers = &msg[msg.rfind("!").unwrap()+1..];
 
                     let mut data_buf = Vec::new();
@@ -76,12 +76,12 @@ fn main() -> std::io::Result<()> {
                                 let msg_temp : Vec<_> = msg_temp_all.split("!").collect();
                                 let msg_temp_type = msg_temp.clone().into_iter().nth(0);
                                 let msg_temp_val = msg_temp.clone().into_iter().nth(1).expect("value").parse::<i32>().unwrap();
-                                if msg_temp_type == Some("cam") 
+                                if msg_temp_type == Some("cam")
                                 {
                                     cam_num.store(msg_temp_val, Ordering::Relaxed);
-                      
-				                    println!("{}", msg_temp_val);
-                                }else if msg_temp_type == Some("qual") 
+
+                                                    println!("{}", msg_temp_val);
+                                }else if msg_temp_type == Some("qual")
                                 {
                                     cam_qual.store(msg_temp_val, Ordering::Relaxed);
                                     println!("{}", msg_temp_val);
@@ -107,9 +107,9 @@ fn send_camera(socket : &UdpSocket, cam : &mut camera::Camera, cam_qual : i32) -
 
         let bytes: String;
 
-        let packet_size = 65500;
+        let packet_size = 1472;
 
-	    (cam_buf, bytes) = cam.get_single_camera_buf(cam_qual);
+        (cam_buf, bytes) = cam.get_single_camera_buf(cam_qual);
         let pre_msg = (bytes + "!" + "4").pad_to_width(32);
         let pre_msg_bytes = pre_msg.as_bytes();
         socket.send_to(&pre_msg_bytes, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
@@ -117,7 +117,7 @@ fn send_camera(socket : &UdpSocket, cam : &mut camera::Camera, cam_qual : i32) -
         if cam_buf.len() > packet_size {
             while cam_buf.len() > packet_size {
                 let temp: Vec<u8> = cam_buf[..packet_size].to_vec();
-                cam_buf = cam_buf[(packet_size+1)..].to_vec();
+                cam_buf = cam_buf[(packet_size)..].to_vec();
 
                 socket.send_to(&temp, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
             }
@@ -137,7 +137,7 @@ fn send_camera_both(socket : &UdpSocket, cam1 : &mut camera::Camera, cam2 : &mut
 
         let packet_size = 65500;
 
-	    (cam_buf, bytes) = cam.get_single_camera_buf(cam_qual);
+            (cam_buf, bytes) = cam1.get_single_camera_buf(cam_qual);
         let pre_msg = (bytes + "!" + "4").pad_to_width(32);
         let pre_msg_bytes = pre_msg.as_bytes();
         socket.send_to(&pre_msg_bytes, SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), *PORT))?;
